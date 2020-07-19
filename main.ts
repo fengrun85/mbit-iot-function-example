@@ -5,6 +5,7 @@ function ConnectWifi (YOUR_SSID: string, YOUR_PW: string) {
         ESP8266_IoT.wait(5000)
     }
     OLED.writeStringNewLine("Wifi Connected")
+    basic.showIcon(IconNames.Yes)
     basic.pause(1000)
     OLED.clear()
 }
@@ -38,16 +39,35 @@ function UpdateThingSpeak (WriteKey: string, Temp: number, Humid: number, Press:
     )
     ESP8266_IoT.uploadData()
     OLED.writeStringNewLine("TS Update Done")
+    basic.pause(5000)
+    OLED.clear()
 }
-let SSID = "YourSSID"
-let WifiPass = "YourPassword"
-let TSWriteKey = "YourWriteKey"
+input.onButtonPressed(Button.A, function () {
+    ConnectWifi(SSID, WifiPass)
+})
+input.onButtonPressed(Button.AB, function () {
+    UpdateThingSpeak(TSWriteKey, Environment.octopus_BME280(Environment.BME280_state.BME280_temperature_C), Environment.octopus_BME280(Environment.BME280_state.BME280_humidity), Environment.octopus_BME280(Environment.BME280_state.BME280_pressure), Environment.octopus_BME280(Environment.BME280_state.BME280_altitude))
+})
+input.onButtonPressed(Button.B, function () {
+    DisplayBME280Readings(Environment.octopus_BME280(Environment.BME280_state.BME280_temperature_C), Environment.octopus_BME280(Environment.BME280_state.BME280_humidity), Environment.octopus_BME280(Environment.BME280_state.BME280_pressure), Environment.octopus_BME280(Environment.BME280_state.BME280_altitude))
+})
+let TSWriteKey = ""
+let WifiPass = ""
+let SSID = ""
+basic.showIcon(IconNames.Happy)
+SSID = "YourSSID"
+WifiPass = "YourPassword"
+TSWriteKey = "YourWriteKey"
+let UpdateIntervalInSec = 55
+music.setVolume(45)
 ESP8266_IoT.initWIFI(SerialPin.P8, SerialPin.P12, BaudRate.BaudRate115200)
 OLED.init(128, 64)
-ConnectWifi("abc", "abc")
+basic.showIcon(IconNames.Pitchfork)
+ConnectWifi(SSID, WifiPass)
 music.playTone(262, music.beat(BeatFraction.Double))
 basic.forever(function () {
     ConnectWifi(SSID, WifiPass)
     DisplayBME280Readings(Environment.octopus_BME280(Environment.BME280_state.BME280_temperature_C), Environment.octopus_BME280(Environment.BME280_state.BME280_humidity), Environment.octopus_BME280(Environment.BME280_state.BME280_pressure), Environment.octopus_BME280(Environment.BME280_state.BME280_altitude))
     UpdateThingSpeak(TSWriteKey, Environment.octopus_BME280(Environment.BME280_state.BME280_temperature_C), Environment.octopus_BME280(Environment.BME280_state.BME280_humidity), Environment.octopus_BME280(Environment.BME280_state.BME280_pressure), Environment.octopus_BME280(Environment.BME280_state.BME280_altitude))
+    basic.pause(UpdateIntervalInSec * 1000)
 })
