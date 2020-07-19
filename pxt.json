@@ -1,5 +1,6 @@
 {
     "name": "iot function example",
+    "version": "1.0.0",
     "description": "",
     "dependencies": {
         "core": "*",
