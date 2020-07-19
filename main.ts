@@ -39,8 +39,8 @@ function UpdateThingSpeak (WriteKey: string, Temp: number, Humid: number, Press:
     )
     ESP8266_IoT.uploadData()
     OLED.writeStringNewLine("TS Update Done")
-    basic.pause(5000)
     music.playMelody("C D E F E D C C ", 240)
+    basic.pause(5000)
     OLED.clear()
 }
 input.onButtonPressed(Button.A, function () {
@@ -59,7 +59,7 @@ basic.showIcon(IconNames.Happy)
 SSID = "yourSSID"
 WifiPass = "yourWifiPW"
 TSWriteKey = "yourChannelWriteKey"
-let UpdateIntervalInSec = 49
+let UpdateIntervalInSeconds = 49
 music.setVolume(45)
 ESP8266_IoT.initWIFI(SerialPin.P8, SerialPin.P12, BaudRate.BaudRate115200)
 OLED.init(128, 64)
@@ -70,5 +70,5 @@ basic.forever(function () {
     ConnectWifi(SSID, WifiPass)
     DisplayBME280Readings(Environment.octopus_BME280(Environment.BME280_state.BME280_temperature_C), Environment.octopus_BME280(Environment.BME280_state.BME280_humidity), Environment.octopus_BME280(Environment.BME280_state.BME280_pressure), Environment.octopus_BME280(Environment.BME280_state.BME280_altitude))
     UpdateThingSpeak(TSWriteKey, Environment.octopus_BME280(Environment.BME280_state.BME280_temperature_C), Environment.octopus_BME280(Environment.BME280_state.BME280_humidity), Environment.octopus_BME280(Environment.BME280_state.BME280_pressure), Environment.octopus_BME280(Environment.BME280_state.BME280_altitude))
-    basic.pause(UpdateIntervalInSec * 1000)
+    basic.pause(UpdateIntervalInSeconds * 1000)
 })
