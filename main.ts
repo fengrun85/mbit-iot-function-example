@@ -40,6 +40,7 @@ function UpdateThingSpeak (WriteKey: string, Temp: number, Humid: number, Press:
     ESP8266_IoT.uploadData()
     OLED.writeStringNewLine("TS Update Done")
     basic.pause(5000)
+    music.playMelody("C D E F E D C C ", 240)
     OLED.clear()
 }
 input.onButtonPressed(Button.A, function () {
@@ -55,10 +56,10 @@ let TSWriteKey = ""
 let WifiPass = ""
 let SSID = ""
 basic.showIcon(IconNames.Happy)
-SSID = "YourSSID"
-WifiPass = "YourPassword"
-TSWriteKey = "YourWriteKey"
-let UpdateIntervalInSec = 55
+SSID = "yourSSID"
+WifiPass = "yourWifiPW"
+TSWriteKey = "yourChannelWriteKey"
+let UpdateIntervalInSec = 49
 music.setVolume(45)
 ESP8266_IoT.initWIFI(SerialPin.P8, SerialPin.P12, BaudRate.BaudRate115200)
 OLED.init(128, 64)
